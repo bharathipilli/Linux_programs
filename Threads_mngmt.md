@@ -217,7 +217,8 @@ int main(void)
   return 0; 
 }
 
-void *create_thread(void *arg)                                // thread function 
+void *create_thread(void *arg)                                // thread function
+
 {
   char *str=(char *)arg;
   printf("%s:%ld\n",str,pthread_self());
