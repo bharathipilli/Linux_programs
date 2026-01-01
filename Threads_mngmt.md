@@ -153,9 +153,7 @@ void *create_thread(void *arg)                                // thread function
 #include<stdio.h>
 #include<unistd.h>
 #include<pthread.h>
-
 void *create_thread(void *arg);
-
 int main(void)
 {
   pthread_t tid;                   // Thread
