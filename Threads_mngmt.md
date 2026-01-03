@@ -222,3 +222,225 @@ void *create_thread(void *arg)                                // thread function
   printf("%s:%ld\n",str,pthread_self());
 } 
 ```
+## 6.Prints the sum of two numbers?
+```c
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *6.Develop a C program to create a thread that prints the sum of two numbers? *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+#include<stdio.h>
+#include<unistd.h>
+#include<pthread.h>
+ 
+struct two_args
+{
+  int a;
+  int b;
+};
+
+void *create_thread(void *arg);
+
+int main(void)
+{
+  struct two_args nums;
+  pthread_t tid;                                    // Thread
+  printf("Enter Numbers :");
+  scanf("%d%d",&nums.a,&nums.b);
+  if(pthread_create(&tid,NULL,create_thread,(void *)&nums)!=0)   // Create the thread
+  {
+    printf("thread creation is failed\n");
+    return 0;
+  }
+  pthread_join(tid,NULL);                          // wait for the thread to finish
+  return 0; 
+}
+
+void *create_thread(void *arg)                                // thread function 
+{
+  struct two_args *nums=(struct two_args *)arg;	
+  printf("sum=%d\n",(nums->a)+(nums->b));
+} 
+```
+## 7.Calculates the square of a number?  
+```c
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 7.Implement a C program to create a thread that calculates the square of a number?  *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
+
+#include<stdio.h>
+#include<unistd.h>
+#include<pthread.h>
+ 
+void *create_thread(void *arg);
+
+int main(void)
+{
+  pthread_t tid;
+  int num;
+  printf("Enter Numbers :");
+  scanf("%d",&num);
+  if(pthread_create(&tid,NULL,create_thread,(void *)&num)!=0)   // Create the thread
+  {
+    printf("thread creation is failed\n");
+    return 0;
+  }
+  pthread_join(tid,NULL);                          // wait for the thread to finish
+  return 0; 
+}
+
+void *create_thread(void *arg)                                // thread function 
+{
+  int num=*(int *)arg;	
+  printf("square=%d\n",num*num);
+} 
+```
+## 8.Prints the current date and time?
+```c
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 8.Write a C program to create a thread that prints the current date and time? *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
+
+#include<stdio.h>
+#include<time.h>
+#include<pthread.h>
+ 
+void *create_thread(void *arg);
+
+int main(void)
+{
+  pthread_t tid;
+  pthread_create(&tid,NULL,create_thread,NULL);     // Create the thread
+  pthread_join(tid,NULL);                          // wait for the thread to finish
+  return 0; 
+}
+
+void *create_thread(void *arg)                                // thread function 
+{
+  time_t now;
+  struct tm *current_time;
+  time(&now);
+  current_time=localtime(&now);
+  printf("time=%s\n",asctime(current_time));
+} 
+```
+## 9.Checks if a number is prime?
+```c
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * 9.Develop a C program to create a thread that checks if a number is prime?    *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<pthread.h>
+ 
+void *create_thread(void *arg);
+
+int main(void)
+{
+  int num;
+  int *flag;
+  pthread_t tid;
+  printf("Enter Number:");
+  scanf("%d",&num);
+  pthread_create(&tid,NULL,create_thread,(void *)&num);     // Create the thread
+  pthread_join(tid,(void **)&flag);                      // wait for the thread to finish
+  if(*flag==0)
+  {
+    printf("Given number is not prime\n");
+  }
+  else
+  {
+    printf("Given number is prime\n");
+  }
+  free(flag);
+  return 0; 
+}
+
+void *create_thread(void *arg)                                // thread function 
+{
+  int *ptr=(int *)malloc(sizeof(int));
+  int num=*(int *)arg;
+  if(ptr==NULL)
+  {
+    printf("Malloc failed\n");
+    pthread_exit(0);
+  }
+  int i=0;
+  if(num <=0)
+  {
+    *ptr=0;
+    return ptr;
+  }
+  *ptr=1;
+  for(i=2; i*i <=num; ++i)
+  {
+    if(num%i==0)
+    {
+      *ptr=0;
+      return ptr;
+      break;
+    }
+  }
+  return ptr;
+} 
+```
+## 10.Checks if a given string is a palindrome? 
+```c
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+ * 10.Implement a C program to create a thread that checks if a given string is a palindrome?  *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<pthread.h>
+ 
+void *create_thread(void *arg);
+
+int main(void)
+{
+  char str[100];
+  int *flag;
+  pthread_t tid;
+  printf("Enter string(99<):");
+  scanf("%s",str);
+  if(pthread_create(&tid,NULL,create_thread,(void *)str)!=0)     // Create the thread
+  {
+    printf("thread Creation is failed\n");
+    return 7;
+  }
+  pthread_join(tid,(void **)&flag);                      // wait for the thread to finish
+  if(*flag==0)
+  {
+    printf("Given string is not palindrome\n");
+  }
+  else
+  {
+    printf("Given string is palindrome\n");
+  }
+  free(flag);
+  return 0; 
+}
+
+void *create_thread(void *arg)                                // thread function 
+{
+  int *ptr=(int *)malloc(sizeof(int));
+  char *str=(char *)arg;
+  int len=0,i=0;
+  if(ptr==NULL)
+  {
+    printf("Malloc failed\n");
+    pthread_exit(0);
+  }
+  *ptr=1;
+  for(i=0; i<len;i++)
+  {
+    if(str[i]==str[--len])
+    {
+      *ptr=0;
+      return ptr;
+      break;
+    }
+  }
+  return ptr;
+} 
+```
